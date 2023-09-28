@@ -487,17 +487,17 @@ class _startingScreenState extends State<startingScreen> {
               ],
             ),
           ),
-          Container(
-            height: 640,
-            color: Colors.white,
-            padding: const EdgeInsets.all(0.0),
-            child: FlutterCarouselMediaSlider(
-              carouselMediaList: media,
-              onPageChanged: (index) {
-                debugPrint('Page Changed: $index');
-              },
-            ),
-          ),
+          // Container(
+          //   height: 640,
+          //   color: Colors.white,
+          //   padding: const EdgeInsets.all(0.0),
+          //   child: FlutterCarouselMediaSlider(
+          //     carouselMediaList: media,
+          //     onPageChanged: (index) {
+          //       debugPrint('Page Changed: $index');
+          //     },
+          //   ),
+          // ),
         ],
       )),
       // floatingActionButton: FloatingActionButton(
