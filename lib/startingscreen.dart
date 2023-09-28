@@ -89,20 +89,13 @@ class _startingScreenState extends State<startingScreen> {
   List videos = [];
 
   var apiUrl = 'http://172.16.10.11/erpgw_api/post/teamsAPI/getInfo';
-
-  List<CarouselMedia> media = [
-    CarouselMedia(
-      mediaName: 'Video 2',
-      mediaUrl: "/storage/emulated/0/Download/teso/teso.mp4",
-      mediaType: CarouselMediaType.video,
-      carouselImageSource: CarouselImageSource.file,
-    )
-  ].toList();
+  String date = DateFormat.yMMMd().format(DateTime.now());
+  List<CarouselMedia> media = [];
 
   @override
   void initState() {
     downloadVideo();
-    convertListToVideoFileMobile();
+    //convertListToVideoFileMobile();
 
     super.initState();
     _controllerCenterRight =
@@ -111,6 +104,8 @@ class _startingScreenState extends State<startingScreen> {
         ConfettiController(duration: const Duration(seconds: 10));
 
     postRequest();
+    _controllerCenterRight.play();
+    _controllerCenterLeft.play();
     final cron = Cron();
     cron.schedule(Schedule.parse('0 2 * * *'), () async {
       postRequest();
@@ -173,31 +168,29 @@ class _startingScreenState extends State<startingScreen> {
       String savePath = dir + "$savename";
       // print(savePath + "zzzzzzzzzzzzzzzzz");
 
-      var data = CarouselMedia(
-        mediaName: 'Video 1',
-        mediaUrl: savePath,
-        mediaType: CarouselMediaType.video,
-        carouselImageSource: CarouselImageSource.file,
-      );
-
+      var data = [
+        CarouselMedia(
+          mediaName: 'Video 1',
+          mediaUrl: dir + "/teso/teso_properties.mp4",
+          mediaType: CarouselMediaType.video,
+          carouselImageSource: CarouselImageSource.file,
+        ),
+        CarouselMedia(
+          mediaName: 'Video 2',
+          mediaUrl: dir + "/teso/teso_foods.mp4",
+          mediaType: CarouselMediaType.video,
+          carouselImageSource: CarouselImageSource.file,
+        ),
+        CarouselMedia(
+          mediaName: 'Video 3',
+          mediaUrl: dir + "/teso/teso_investment.mp4",
+          mediaType: CarouselMediaType.video,
+          carouselImageSource: CarouselImageSource.file,
+        )
+      ];
       setState(() {
-        media = [data];
+        media = data.toList();
       });
-
-      //output:  /storage/emulated/0/Download/banner.png
-
-      // try {
-      //   await Dio().download(fileurl, savePath,
-      //       onReceiveProgress: (received, total) {
-      //     if (total != -1) {
-      //       print((received / total * 100).toStringAsFixed(0) + "%");
-      //       //you can build progressbar feature too
-      //     }
-      //   });
-      //   print("File is saved to download folder.");
-      // } on DioError catch (e) {
-      //   print(e.message);
-      // }
     }
   }
 
@@ -244,8 +237,8 @@ class _startingScreenState extends State<startingScreen> {
 
       final hbday = result.where((element) =>
           element["BDAY"] != null &&
-          DateFormat('MM-DD').format(DateTime.parse(element["BDAY"])) ==
-              DateFormat('MM-DD').format(DateTime.now()));
+          DateFormat('MM-dd').format(DateTime.parse(element["BDAY"])) ==
+              DateFormat('MM-dd').format(DateTime.now()));
       data = hbday.toList();
       if (data.isNotEmpty) {
         for (var item in data) {
@@ -292,6 +285,7 @@ class _startingScreenState extends State<startingScreen> {
                                 ? Image.memory(
                                     base64Decode(item["pictureBase64"]),
                                     width: 400,
+                                    height: 450,
                                   )
                                 : Image.asset(
                                     'assets/image/tenor.gif',
@@ -305,15 +299,22 @@ class _startingScreenState extends State<startingScreen> {
               Column(
                 children: [
                   Container(
-                    height: 280,
-                    width: 340,
+                    height: 350,
+                    width: 350,
                     padding: const EdgeInsets.symmetric(
-                        vertical: 2.0, horizontal: 20.0),
+                        vertical: 80.0, horizontal: 30.0),
                     child: ClipRRect(
                       child: Text(
-                        "${item["DISPLAYNAME"]}",
+                        "${item["LASTNAME"][0]}."
+                        " "
+                        "${item["FIRSTNAME"]}"
+                        " "
+                        "${item["POSITION_NAME"]}"
+                        "    "
+                        "${item["COMPANY_NAME"]}"
+                        " ",
                         style: const TextStyle(
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          color: Color.fromARGB(255, 9, 17, 124),
                           fontSize: 40.0,
                           fontWeight: FontWeight.bold,
                         ),
@@ -366,7 +367,7 @@ class _startingScreenState extends State<startingScreen> {
           child: Column(
         children: [
           Container(
-            height: 1220,
+            height: 1226,
             child: Column(
               children: <Widget>[
                 Row(
@@ -375,17 +376,28 @@ class _startingScreenState extends State<startingScreen> {
                       clipper: WaveClipperTwo(),
                       child: Container(
                         width: 1080,
-                        height: 180,
+                        height: 220,
                         //  color: Colors.pinkAccent,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage("assets/image/friends.jpg"),
+                              image: AssetImage("assets/image/teso.png"),
                               fit: BoxFit.cover),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
+                Row(children: [
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(800.0, 0.0, 0, 0),
+                    child: Text(
+                      date,
+                      style: const TextStyle(
+                          fontSize: 40,
+                          color: Color.fromARGB(255, 57, 54, 247)),
+                    ),
+                  ),
+                ]),
                 Row(
                   children: <Widget>[
                     Align(
@@ -441,9 +453,9 @@ class _startingScreenState extends State<startingScreen> {
                                 aspectRatio: 2.0,
                                 // scrollDirection: Axis.vertical,
                                 autoPlay: true,
-                                autoPlayInterval: const Duration(seconds: 5),
+                                autoPlayInterval: const Duration(seconds: 10),
                                 autoPlayAnimationDuration:
-                                    const Duration(milliseconds: 5000),
+                                    const Duration(milliseconds: 2),
                                 autoPlayCurve: Curves.fastOutSlowIn,
                                 enlargeCenterPage: true,
                               ),
@@ -457,16 +469,11 @@ class _startingScreenState extends State<startingScreen> {
                   children: [
                     Center(
                       child: Container(
-                        padding: const EdgeInsets.all(150),
+                        padding: const EdgeInsets.fromLTRB(150.0, 150.0, 0, 0),
                         child: AnimatedTextKit(
                           animatedTexts: [
                             ColorizeAnimatedText(
                               'Төрсөн өдрийн мэнд хүргэе',
-                              textStyle: colorizeTextStyle,
-                              colors: colorizeColors,
-                            ),
-                            ColorizeAnimatedText(
-                              'Өдрийг сайхан өнгөрүүлээрэй',
                               textStyle: colorizeTextStyle,
                               colors: colorizeColors,
                             ),
