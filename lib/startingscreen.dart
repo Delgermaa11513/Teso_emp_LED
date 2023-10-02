@@ -341,33 +341,11 @@ class _startingScreenState extends State<startingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // bottomNavigationBar: const SizedBox(
-      //   height: 50,
-      //   child: BottomAppBar(
-      //     shape: CircularNotchedRectangle(),
-      //     color: Color.fromARGB(255, 64, 140, 255),
-      //   ),
-      // ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //           builder: (context) => const Poem(),
-      //         ));
-      //   },
-      //   backgroundColor: const Color(0xff13195b),
-      //   child: const Icon(
-      //     Icons.play_circle_fill_sharp,
-      //     color: Colors.white,
-      //   ),
-      // ),
-
       body: Center(
           child: Column(
         children: [
           Container(
-            height: 1226,
+            height: 1260,
             child: Column(
               children: <Widget>[
                 Row(
@@ -487,17 +465,17 @@ class _startingScreenState extends State<startingScreen> {
               ],
             ),
           ),
-          // Container(
-          //   height: 640,
-          //   color: Colors.white,
-          //   padding: const EdgeInsets.all(0.0),
-          //   child: FlutterCarouselMediaSlider(
-          //     carouselMediaList: media,
-          //     onPageChanged: (index) {
-          //       debugPrint('Page Changed: $index');
-          //     },
-          //   ),
-          // ),
+          Container(
+            height: 610,
+            color: Colors.white,
+            padding: const EdgeInsets.all(0.0),
+            child: FlutterCarouselMediaSlider(
+              carouselMediaList: media,
+              onPageChanged: (index) {
+                debugPrint('Page Changed: $index');
+              },
+            ),
+          ),
         ],
       )),
       // floatingActionButton: FloatingActionButton(
