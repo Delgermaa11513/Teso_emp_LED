@@ -12,16 +12,16 @@ import 'package:permission_handler/permission_handler.dart';
 // import 'package:flutter_downloader/flutter_downloader.dart';
 
 // ignore: camel_case_types
-class startingScreen extends StatefulWidget {
-  const startingScreen({super.key});
+class news extends StatefulWidget {
+  const news({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _startingScreenState createState() => _startingScreenState();
+  _newsState createState() => _newsState();
 }
 
 // ignore: camel_case_types
-class _startingScreenState extends State<startingScreen> {
+class _newsState extends State<news> {
   @override
 
   // void downloadVideo() async {
