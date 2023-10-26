@@ -2,11 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/birth.dart';
+import 'package:flutter_application_2/ui/home_page.dart';
 
 import 'dart:async';
 import 'package:flutter_carousel_media_slider/carousel_media.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:flutter_carousel_media_slider/flutter_carousel_media_slider.dart';
 
 // import 'package:video_player/video_player.dart';
 // import 'package:flutter_downloader/flutter_downloader.dart';
@@ -54,6 +57,7 @@ class _startingScreenState extends State<startingScreen> {
   static Future<String> getExternalDocumentPath() async {
     // To check whether permission is given for this app or not.
     var status = await Permission.storage.status;
+
     print(status);
     if (!status.isGranted) {
       print("test");
@@ -110,22 +114,46 @@ class _startingScreenState extends State<startingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Center(
           child: Column(
         children: [
-          Container(height: 1260, child: birth()),
-          // Container(
-          //   height: 610,
-          //   color: Colors.white,
-          //   padding: const EdgeInsets.all(0.0),
-          //   child: FlutterCarouselMediaSlider(
-          //     carouselMediaList: media,
-          //     onPageChanged: (index) {
-          //       debugPrint('Page Changed: $index');
-          //     },
-          //   ),
-          // ),
+          Container(
+            child: Row(
+              children: <Widget>[
+                ClipPath(
+                  clipper: WaveClipperTwo(),
+                  child: Container(
+                    width: size.width,
+                    height: 180,
+                    //  color: Colors.pinkAccent,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/image/teso.png"),
+                          fit: BoxFit.cover),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: 300,
+            child: HomePage(),
+          ),
+          Container(height: 770, child: birth()),
+          Container(
+            height: 614,
+            color: Colors.white,
+            // padding: const EdgeInsets.all(0.0),
+            // child: FlutterCarouselMediaSlider(
+            //   carouselMediaList: media,
+            //   onPageChanged: (index) {
+            //     debugPrint('Page Changed: $index');
+            //   },
+            // ),
+          ),
         ],
       )),
       // floatingActionButton: FloatingActionButton(

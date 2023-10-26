@@ -1,8 +1,6 @@
-import 'dart:io';
-
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
@@ -12,8 +10,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'dart:async';
 import 'package:flutter_carousel_media_slider/carousel_media.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_application_2/constants.dart';
 
 class birth extends StatefulWidget {
   const birth({super.key});
@@ -38,8 +35,24 @@ class _birthState extends State<birth> {
   List videos = [];
 
   var apiUrl = 'http://172.16.10.11/erpgw_api/post/teamsAPI/getInfo';
-  var date = DateTime.now();
+  var date = DateFormat.yMMMEd().format(DateTime.now());
   List<CarouselMedia> media = [];
+  //API Call
+
+  //function to return the first two names of the string location
+  static String getShortLocationName(String s) {
+    List<String> wordList = s.split(" ");
+
+    if (wordList.isNotEmpty) {
+      if (wordList.length > 1) {
+        return wordList[0] + " " + wordList[1];
+      } else {
+        return wordList[0];
+      }
+    } else {
+      return " ";
+    }
+  }
 
   @override
   void initState() {
@@ -60,7 +73,7 @@ class _birthState extends State<birth> {
     cron.schedule(Schedule.parse('0 2 * * *'), () async {
       postRequest();
       setState(() {
-        date = DateTime.now();
+        date = DateFormat.yMMMEd().format(DateTime.now());
       });
     });
   }
@@ -73,6 +86,7 @@ class _birthState extends State<birth> {
     super.dispose();
   }
 
+  //
 //get EmployeeList
   Future<List> postRequest() async {
     //replace your restFull API here.
@@ -135,7 +149,7 @@ class _birthState extends State<birth> {
               Column(
                 children: [
                   Container(
-                    margin: const EdgeInsets.all(0.0),
+                    padding: const EdgeInsets.fromLTRB(90.0, 0.0, 0, 0),
                     child: ClipRRect(
                         borderRadius:
                             const BorderRadius.all(Radius.circular(5.0)),
@@ -143,11 +157,13 @@ class _birthState extends State<birth> {
                           children: <Widget>[
                             Container(
                                 width: 400,
-                                height: 500,
+                                height: 350,
                                 foregroundDecoration: BoxDecoration(
                                     // add border
                                     border: Border.all(
-                                        width: 16, color: Colors.red),
+                                        width: 16,
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255)),
                                     // round the corners
                                     borderRadius: BorderRadius.circular(150)),
                                 child: ClipRRect(
@@ -155,13 +171,10 @@ class _birthState extends State<birth> {
                                   child: item['pictureBase64'] != null
                                       ? Image.memory(
                                           base64Decode(item["pictureBase64"]),
-                                          width: 400,
-                                          height: 500,
+                                          width: 450,
                                         )
                                       : Image.asset(
                                           'assets/image/tenor.gif',
-                                          width: 400,
-                                          height: 500,
                                         ),
                                 )),
                           ],
@@ -172,27 +185,57 @@ class _birthState extends State<birth> {
               Column(
                 children: [
                   Container(
-                    height: 350,
-                    width: 350,
+                    width: 360,
                     padding: const EdgeInsets.symmetric(
-                        vertical: 80.0, horizontal: 30.0),
+                        vertical: 50.0, horizontal: 10.0),
                     child: ClipRRect(
-                      child: Text(
-                        "${item["LASTNAME"][0]}."
-                        " "
-                        "${item["FIRSTNAME"]}"
-                        " "
-                        "${item["POSITION_NAME"]}"
-                        "    "
-                        "${item["COMPANY_NAME"]}"
-                        " ",
-                        style: const TextStyle(
-                          color: Color.fromARGB(255, 9, 17, 124),
-                          fontSize: 40.0,
-                          fontWeight: FontWeight.bold,
+                        child: Column(
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              "${item["LASTNAME"][0]}."
+                              " "
+                              "${item["FIRSTNAME"]}",
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 9, 17, 124),
+                                fontSize: 40.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          ],
                         ),
-                      ),
-                    ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(0.0, 20, 0, 10),
+                          width: 350,
+                          height: 200,
+                          child: Column(
+                            children: [
+                              Text(
+                                "${item["POSITION_NAME"]}",
+                                style: const TextStyle(
+                                  color: Color.fromARGB(255, 9, 17, 124),
+                                  fontSize: 35.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              "${item["COMPANY_NAME"]}",
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 9, 17, 124),
+                                fontSize: 35.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    )),
                   ),
                 ],
               )
@@ -213,38 +256,60 @@ class _birthState extends State<birth> {
   );
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              ClipPath(
-                clipper: WaveClipperTwo(),
-                child: Container(
-                  width: 1080,
-                  height: 220,
-                  //  color: Colors.pinkAccent,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/image/teso.png"),
-                        fit: BoxFit.cover),
-                  ),
-                ),
-              ),
-            ],
-          ),
           Row(children: [
             Container(
-              padding: const EdgeInsets.fromLTRB(800.0, 0.0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(700.0, 0.0, 0, 0),
               child: Text(
                 '$date',
                 style: const TextStyle(
-                    fontSize: 40, color: Color.fromARGB(255, 57, 54, 247)),
+                    fontSize: 30, color: Color.fromARGB(255, 69, 66, 240)),
               ),
             ),
           ]),
-          Row(
+          Column(
             children: <Widget>[
+              Align(
+                alignment: Alignment.topLeft,
+                child: ConfettiWidget(
+                  confettiController: _controllerCenterRight,
+                  blastDirectionality:
+                      BlastDirectionality.explosive, // radial value - LEFT
+                  particleDrag: 0.05, // apply drag to the confetti
+                  emissionFrequency: 0.1, // how often it should emit
+                  numberOfParticles: 5, // number of particles to emit
+                  gravity: 0.03, // gravity - or fall speed
+                  shouldLoop: false,
+                  colors: const [
+                    Colors.green,
+                    Colors.blue,
+                    Colors.pink,
+                    Colors.yellow,
+                  ], // manually specify the colors to be used
+                ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: ConfettiWidget(
+                  confettiController: _controllerCenterRight,
+                  blastDirectionality:
+                      BlastDirectionality.explosive, // radial value - LEFT
+                  particleDrag: 0.1, // apply drag to the confetti
+                  emissionFrequency: 0.1, // how often it should emit
+                  numberOfParticles: 5, // number of particles to emit
+                  gravity: 0.05, // gravity - or fall speed
+                  shouldLoop: false,
+                  colors: const [
+                    Colors.green,
+                    Colors.blue,
+                    Colors.pink,
+                    Colors.yellow,
+                  ], // manually specify the colors to be used
+                ),
+              ),
               Align(
                 alignment: Alignment.topRight,
                 child: ConfettiWidget(
@@ -252,9 +317,9 @@ class _birthState extends State<birth> {
                   blastDirectionality:
                       BlastDirectionality.explosive, // radial value - LEFT
                   particleDrag: 0.05, // apply drag to the confetti
-                  emissionFrequency: 0.5, // how often it should emit
-                  numberOfParticles: 10, // number of particles to emit
-                  gravity: 0.5, // gravity - or fall speed
+                  emissionFrequency: 0.1, // how often it should emit
+                  numberOfParticles: 5, // number of particles to emit
+                  gravity: 0.01, // gravity - or fall speed
                   shouldLoop: false,
                   colors: const [
                     Colors.green,
@@ -266,69 +331,43 @@ class _birthState extends State<birth> {
               ),
             ],
           ),
-          Row(
-            children: <Widget>[
-              Column(
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: ConfettiWidget(
-                      confettiController: _controllerCenterRight,
-                      blastDirectionality:
-                          BlastDirectionality.explosive, // radial value - LEFT
-                      particleDrag: 0.05, // apply drag to the confetti
-                      emissionFrequency: 0.5, // how often it should emit
-                      numberOfParticles: 5, // number of particles to emit
-                      gravity: 0.05, // gravity - or fall speed
-                      shouldLoop: false,
-                      colors: const [
-                        Colors.green,
-                        Colors.blue,
-                        Colors.pink,
-                        Colors.yellow,
-                      ], // manually specify the colors to be used
+          Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(0.0),
+                width: 1080,
+                height: 600,
+                child: CarouselSlider(
+                    options: CarouselOptions(
+                      aspectRatio: 2.0,
+                      // scrollDirection: Axis.vertical,
+                      autoPlay: true,
+                      autoPlayInterval: const Duration(seconds: 10),
+                      autoPlayAnimationDuration:
+                          const Duration(milliseconds: 2),
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      enlargeCenterPage: true,
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(0.0),
-                    width: 1080,
-                    height: 650,
-                    child: CarouselSlider(
-                        options: CarouselOptions(
-                          aspectRatio: 2.0,
-                          // scrollDirection: Axis.vertical,
-                          autoPlay: true,
-                          autoPlayInterval: const Duration(seconds: 10),
-                          autoPlayAnimationDuration:
-                              const Duration(milliseconds: 2),
-                          autoPlayCurve: Curves.fastOutSlowIn,
-                          enlargeCenterPage: true,
-                        ),
-                        items: imageSliders),
-                  ),
-                ],
+                    items: imageSliders),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0, 0),
+                child: AnimatedTextKit(
+                  animatedTexts: [
+                    ColorizeAnimatedText(
+                      'Төрсөн өдрийн мэнд хүргэе',
+                      textStyle: colorizeTextStyle,
+                      colors: colorizeColors,
+                    ),
+                  ],
+                  isRepeatingAnimation: true,
+                  onTap: () {
+                    print("Tap Event");
+                  },
+                ),
               ),
             ],
           ),
-          Row(
-            children: [
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(150.0, 150.0, 0, 0),
-                  child: AnimatedTextKit(
-                    animatedTexts: [
-                      ColorizeAnimatedText(
-                        'Төрсөн өдрийн мэнд хүргэе',
-                        textStyle: colorizeTextStyle,
-                        colors: colorizeColors,
-                      ),
-                    ],
-                    isRepeatingAnimation: true,
-                  ),
-                ),
-              )
-            ],
-          )
         ],
       ),
     );

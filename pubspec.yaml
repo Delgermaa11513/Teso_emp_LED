@@ -56,6 +56,8 @@ dependencies:
   localstorage: ^4.0.1+4
   path_provider: ^2.1.1
   file_picker: ^5.5.0
+  weather: ^3.1.1
+  modal_bottom_sheet: ^3.0.0-pre
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +82,7 @@ flutter:
 
   assets:
     - assets/image/
+    - assets/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
